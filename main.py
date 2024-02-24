@@ -1,24 +1,30 @@
 import pygame
-import test
+
+import functions
 
 pygame.init()
 
-piece = test.Piece(None, None, None, None, None)
-board = test.Board((None, None, None, None))
-whitepawn = test.Pawn('white', 1 , 1)
-screen = test.screen
+
+white, black, red = (255, 255, 255), (0, 0, 0), (255, 0, 0)
+Board = functions.Board()
+
 
 running = True
 while(running):
-    board.drawBoard()
+    Board.drawBoard()
+    for i in range(8):
+        for i in range(8):
+            pawn_white = functions.Pawn(1, i, white)
+            pawn_white.draw(1, i, white)
+            Board.chessBoard[1][i] = pawn_white
 
+            pawn_black = functions.Pawn(6, i, black)
+            pawn_black.draw(6, i, black)
+            Board.chessBoard[6][i] = pawn_black
     for event in pygame.event.get():
+        
         if event.type == pygame.QUIT:
             running = False
             pygame.quit()
-    board.drawBoard()   
-    whitepawn.draw(screen)
     pygame.display.update()
-        
-        
-
+pygame.quit()
