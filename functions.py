@@ -1,69 +1,74 @@
 import pygame
-pygame.init()
 
+pygame.init()
+white, black, red = (255, 255, 255), (0, 0, 0), (255, 0, 0)
 
 pygame.display.set_caption('chess')
 width, height = 800, 800
-white, black, red = (255, 255, 255), (0, 0, 0), (255, 0, 0)
 screen = pygame.display.set_mode((width, height))
 screen.fill(white)
-squareSize = (width/8, height/8)
 #setboard(display)
 #for every square created teh x and y can be stored in list with coordinated and able to change color fo object
 
-whitePawn = pygame.image.load('whitepawn.png')
-blackPawn = pygame.image.load('blackpawn.png')
-
-chessBoard = ''
+whitePawn = pygame.image.load('images/whitepawn.png')
+blackPawn = pygame.image.load('images/blackpawn.png')
 
 
-
-
+squareSize = (100, 100)
+class Square():
+    def __init__(self, x , y, color):
+        self.x = x
+        self.y = y
+        self.color = color
+    def draw(self):
+        pygame.draw.rect(screen, self.color, (self.x * squareSize[0], self.y * squareSize[1], squareSize[0], squareSize[1]))
 
 class Board():
-    def __init__(self, row, column, color, isSelected):
-        self.row = row
-        self.column = column
-        self.color = color
-        self.isSelected = False 
-        
-    def drawBoard(self):
-        chessBoard = [['' for i in range(8)] for j in range(8)]
-        for x in range(8):
-            for y in range(8):               
-                color = white if (x + y) % 2 == 0 else black
-                pygame.draw.rect(screen, color, (x * squareSize[0], y * squareSize[1], squareSize[0], squareSize[1]))
-                
-    def isSelectd(self, isClicked, row, column,):
-        pass    
-        #nned to make mouse click event
-        
-        
-class Piece:
-    def __init__(self,color, row, column, image, validMoves):
-        self.color = color
-        self.row = row
-        self.column = column
-        self.image = image
-        self.validMoves = validMoves
-            
-    #draw can be called everytime a move is made to update chess list and also were the piece is drawn
+    def __init__(self):
+        self.chessBoard = [[None for x in range(8)]for y in range(8)]
+        self.squareSize = (100, 100)
+        self.screen = pygame.display.set_mode((800, 800))
 
-    def draw(self, row, column, image):
-        if self.color == 'white':
-            self.image = whitePawn
-        else:
-            self.image = blackPawn
-        
-        x = self.column * squareSize[0] + squareSize[0]  // 2
-        y = self.row * squareSize[1] + squareSize[1]  // 2
-        screen.blit(self.image, (x - squareSize[0] // 2, y - squareSize[1] // 2))
+    def boardSquare(self, x, y, color):
+        square = Square(x, y, color)
+        self.chessBoard[x][y] = square
 
-
-class Pawn(Piece):
-    def __init__(self, color, row, column):
-        super().__init__(color, row, column)
-
-
-       
+    def draw(self, x, y, color):
+        pygame.draw.rect(screen, color, pygame.Rect(x*self.squareSize[0], y*self.squareSize[1], self.squareSize[0], self.squareSize[1]))
     
+    def drawBoard(self):
+        for x in range(8):
+            for y in range(8):
+                color = white if (x + y) % 2 == 0 else black
+                self.boardSquare(x , y, color)
+                self.draw(x, y, color)
+            pygame.display.update()
+    
+    
+def selectPiece(Board):
+    if(pygame.MOUSEBUTTONDOWN):
+        rowSelected, columnSelected = pygame.mouse.get_pos()
+        rowSelected, columnselected = rowSelected//100, columnSelected//100
+        if(Board.chessBoard[rowSelected][columnSelected] != None):
+            Board.square(rowSelected, columnSelected, red)
+        pygame.display.update()
+
+
+
+
+class Pawn():
+    def __init__(self, x, y , color):
+        self.x = x
+        self.y = y
+        self.color = color
+        #self.validMoves = []
+        self.image = whitePawn if self.color == white else blackPawn
+
+
+    def draw(self, x, y, color):
+        screen.blit(self.image, (self.x * squareSize[0], self.y * squareSize[1]))
+    
+    def validMoves(self):
+        pass
+    
+
