@@ -12,6 +12,17 @@ screen.fill(white)
 
 whitePawn = pygame.image.load('images/whitepawn.png')
 blackPawn = pygame.image.load('images/blackpawn.png')
+whiteRook = pygame.image.load('images/whiterook.png')
+blackRook = pygame.image.load('images/blackrook.png')
+whiteKnight = pygame.image.load('images/whitehorse.png')
+blackKnight = pygame.image.load('images/chess.png')
+whiteBishop = pygame.image.load('images/whiterook.png')
+blackBishop = pygame.image.load('images/blackrook.png')
+whiteQueen = pygame.image.load('images/whitequeen.png')
+blackQueen = pygame.image.load('images/blackqueen.png')
+whiteKing = pygame.image.load('images/whiteking.png')
+blackKing = pygame.image.load('images/blackking.png')
+
 
 
 squareSize = (100, 100)
@@ -48,12 +59,13 @@ class Board():
 def selectPiece(Board):
     if(pygame.MOUSEBUTTONDOWN):
         rowSelected, columnSelected = pygame.mouse.get_pos()
-        rowSelected, columnselected = rowSelected//100, columnSelected//100
+        rowSelected, columnSelected = rowSelected//100, columnSelected//100
         if(Board.chessBoard[rowSelected][columnSelected] != None):
             Board.square(rowSelected, columnSelected, red)
         pygame.display.update()
 
-
+def eatPiece():
+    pass
 
 
 class Pawn():
@@ -61,14 +73,99 @@ class Pawn():
         self.x = x
         self.y = y
         self.color = color
-        #self.validMoves = []
-        self.image = whitePawn if self.color == white else blackPawn
+        self.validMoves = []
+        self.image = whitePawn if self.color == 'white' else blackPawn
 
 
-    def draw(self, x, y, color):
+    def draw(self):
         screen.blit(self.image, (self.x * squareSize[0], self.y * squareSize[1]))
     
     def validMoves(self):
-        pass
-    
+        #need to add in logic so that pieces can move in two squares in first move
+        #need to add logic so that pieces can move diagonally to eat
+        if(self.color == 'white'):
+            self.validMoves = [self.x + 1, self.y + 1]
+        else:
+            self.validMoves = [self.x - 1, self.y - 1]
+            
 
+    def becomeQueen(self):
+        if(self.color == 'white'):
+            if(self.y == 7):
+                return Queen(self.x, self.y, self.color)
+            elif(self.color == 'black'):
+                if(self.y == 0):
+                    return Queen(self.x, self.y, self.color)
+
+class Queen():
+    #need to find way to end game if a color pieces eaten
+    def __init__(self, x, y, color):
+        self.x = x
+        self.y = y
+        self.color = color
+        self.validMoves = []
+
+        
+        
+    def validMoves(self):
+        self.validMoves = [self.x + 1, self.y + 1, self.x + 1 & self.y + 1, self.x - 1, self.y - 1, self.x - 1 & self.y - 1]
+
+        def draw(self):
+            pass
+        
+class Rook():
+    def __init__(self, x, y, color):
+        self.x = x
+        self.y = y
+        self.color = color
+        self.validMoves = []
+    def validMoves(self):
+        pass
+
+class Bishop():
+    def __init__(self, x, y, color):
+        self.x = x
+        self.y = y
+        self.color = color
+        self.validMoves = []
+    def validMoves(self):
+        pass
+
+class King():
+    def __init__(self, x, y, color):
+        self.x = x
+        self.y = y
+        self.color = color
+        self.validMoves = []
+    def validMoves(self):
+        pass
+
+class Knight():
+    def __init__(self, x, y, color):
+        self.x = x
+        self.y = y
+        self.color = color
+        self.validMoves = []
+    def validMoves(self):
+        pass
+
+
+#player class can intiliaze and store the data needed for players
+#instead of using classes in main and event loop
+
+#might be better to just store in normal list
+
+class player:
+    def __init__(self, color):
+        self.color = color
+        self.pieces = []
+        
+
+    def  pieces(self):
+        if(self.color == 'white'):
+            return self.pieces [
+                Pawn(1, 1, self.color),
+                Pawn(1, 2, self.color),
+                    
+                ]
+        
