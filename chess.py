@@ -19,6 +19,10 @@ pieces = [whitePawn, whitePawn, whitePawn, whitePawn, whitePawn, whitePawn, whit
             whiteRook, whiteKnight, whiteBishop, whiteQueen, whiteKing, whiteBishop, whiteKnight, whiteRook,
             blackPawn, blackPawn, blackPawn, blackPawn, blackPawn, blackPawn, blackPawn, blackPawn,
             blackRook, blackKnight, blackBishop, blackQueen, blackKing, blackBishop, blackKnight, blackRook]
+piecesLocation = [(0, 1), (1, 1), (2, 1), (3, 1), (4, 1), (5, 1), (6, 1), (7, 1),
+                (0, 0), (1, 0), (2, 0), (3, 0), (4, 0), (5, 0), (6, 0), (7, 0),
+                (0, 6), (1, 6), (2, 6), (3, 6), (4, 6), (5, 6), (6, 6), (7, 6),
+                (0, 7), (1, 7), (2, 7), (3, 7), (4, 7), (5, 7), (6, 7), (7, 7)]
 
 whitePieces=[whitePawn, whitePawn, whitePawn, whitePawn, whitePawn, whitePawn, whitePawn, whitePawn,
             whiteRook, whiteKnight, whiteBishop, whiteQueen, whiteKing, whiteBishop, whiteKnight, whiteRook]
@@ -43,45 +47,82 @@ def drawBoard():
 
 
 def drawPieces(whitePieces, whiteLocations, blackPieces, blackLocations, pieces):
-    mouseClick = pygame.mouse.get_pressed()
-    turnStep = 0
-
     for i in range(len(whitePieces)):
         piece = whitePieces[i]
         location = whiteLocations[i]
         screen.blit(piece, (location[0] * 100 + 22, location[1] * 100 + 30))
-#update turnStep steps need to be corrected
-#and need to figure out how to use i and j vairable in the turn steps
-    while(turnStep >= 1):
-        if(mouseClick == whiteLocations):
-            #update to have whiteePiecseSelected
-            pieceSelected = pieces[mouseClick[0]][mouseClick[1]]
-            if(turnStep == 1):
-                if(mouseClick == validMove):
-                    piecesSelected = mouseClick
-                    turnStep = 2
-
 
     for j in range(len(blackPieces)):
         piece = blackPieces[j]
         location = blackLocations[j]
         screen.blit(piece, (location[0] * 100 + 22, location[1] * 100 + 30))
-    while(turnStep >= 2):
-        pass
+
+
+
+def drawPieces(whitePieces, whiteLocations, blackPieces, blackLocations, pieces):
+    for i in range(len(whitePieces)):
+        piece = whitePieces[i]
+        location = whiteLocations[i]
+        screen.blit(piece, (location[0] * 100 + 22, location[1] * 100 + 30))
+
+    for j in range(len(blackPieces)):
+        piece = blackPieces[j]
+        location = blackLocations[j]
+        screen.blit(piece, (location[0] * 100 + 22, location[1] * 100 + 30))
+
+
 
 def validMove():
-    pass
+    whiteValidMoves = []
+    blackValidMoves = []
+    temp = []
+    for i in range(len(whitePieces)):
+        if(whitePieces[i] == 'whitePawn'):
+            whiteValidMoves.append(checkPawn('white', i))
+            
+
+        if(pieces[i] == 'blackPawn'):
+            pass
+
+    
+    return whiteValidMoves, blackValidMoves
+        
+
+def checkPawn(color, location):
+    #infinte loop no end condition
+    moves = []
+    row, column = whiteLocations[location]
+    if(color == 'white'):
+        if(row <= 7, 1):
+            moves = [row, column + 1, row, column + 2]
+            return moves
+
+    
+
 
 
 running = True
 while running:
     screen.fill(white)
     drawBoard()
-    drawPieces(whitePieces, whiteLocations, blackPieces, blackLocations)
+    drawPieces(whitePieces, whiteLocations, blackPieces, blackLocations, pieces)
+    validMove()
+    
     pygame.display.update()
+    turnStep = 0
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
+        if(event.type == pygame.MOUSEBUTTONDOWN and event.button == 1):
+                click_coords = (event.pos[0] //100, event.pos[1] //100)
+                if(turnStep <= 1):
+                    if(click_coords in whiteLocations):
+                        selection = whiteLocations.index(click_coords)
+                        if(turnStep == 0):
+                            turnStep = 1
+                    if(selection):
+                        #if(click_coords in whiteValidMoves):
+                        whiteLocations[selection] = click_coords
 
 
 pygame.quit()
