@@ -70,44 +70,38 @@ def drawPieces(whitePieces, whiteLocations, blackPieces, blackLocations, pieces)
         location = blackLocations[j]
         screen.blit(piece, (location[0] * 100 + 22, location[1] * 100 + 30))
 
-
+validWhiteMoves = []
 
 def validMove():
-    whiteValidMoves = []
-    blackValidMoves = []
-    temp = []
-    for i in range(len(whitePieces)):
-        if(whitePieces[i] == 'whitePawn'):
-            whiteValidMoves.append(checkPawn('white', i))
-            
-
-        if(pieces[i] == 'blackPawn'):
-            pass
-
+#needs to be a 2d list that stores valid moves
     
-    return whiteValidMoves, blackValidMoves
-        
+    for i, piece in enumerate(whitePieces):
+        location = whiteLocations[i]
+        moves = checkPawn('white', location)
+        validWhiteMoves.append(moves)
+    print(validWhiteMoves)
 
 def checkPawn(color, location):
     #infinte loop no end condition
+                                        #need to make it so that when pieces are passed in they are passed in properly
+                                        #passed in a list with matching index of white locations
     moves = []
-    row, column = whiteLocations[location]
+    row, column = location
     if(color == 'white'):
-        if(row <= 7, 1):
-            moves = [row, column + 1, row, column + 2]
-            return moves
+        if(row == 1):
+            moves = [(row, column + 1) and (row, column +2)]
+        else:
+            moves = [(row , column + 1)]
+    return moves
+        
 
-    
-
-
-
+validMove()
 running = True
 while running:
     screen.fill(white)
     drawBoard()
     drawPieces(whitePieces, whiteLocations, blackPieces, blackLocations, pieces)
-    validMove()
-    
+
     pygame.display.update()
     turnStep = 0
     for event in pygame.event.get():
